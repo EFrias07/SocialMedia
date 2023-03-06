@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using SocialMedia
+using SocialMedia;
 using SocialMedia.Core.Entities;
 
 namespace SocialMedia.Infrastructure.Data
@@ -25,16 +25,32 @@ namespace SocialMedia.Infrastructure.Data
         {
             modelBuilder.Entity<Comment>(entity =>
             {
+                entity.ToTable("Comentario");
+
                 entity.HasKey(e => e.CommentId);
 
-                entity.Property(e => e.CommentId).ValueGeneratedNever();
+                entity.Property(e => e.CommentId)
+                .HasColumnName("IdComentario")
+                .ValueGeneratedNever();
+
+                entity.Property(e => e.PostId)
+                .HasColumnName("IdPublicacion");
+
+                entity.Property(e => e.UserId)
+                .HasColumnName("IdUsuario");
+
+                entity.Property(e => e.IsActive)
+                .HasColumnName("Activo");
 
                 entity.Property(e => e.Description)
                     .IsRequired()
+                    .HasColumnName("Descripcion")
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Date).HasColumnType("datetime");
+                entity.Property(e => e.Date)
+                .HasColumnName("Fecha")
+                .HasColumnType("datetime");
 
                 entity.HasOne(d => d.Post)
                     .WithMany(p => p.Comments)
@@ -53,14 +69,24 @@ namespace SocialMedia.Infrastructure.Data
             {
                 entity.HasKey(e => e.PostId);
 
+                entity.Property(e => e.PostId)
+                .HasColumnName("IdPublicacion");
+
+                entity.Property(e => e.UserId)
+                .HasColumnName("IdUsuario");
+
                 entity.Property(e => e.Description)
+                    .HasColumnName("Descripcion")
                     .IsRequired()
                     .HasMaxLength(1000)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Date).HasColumnType("datetime");
+                entity.Property(e => e.Date)
+                .HasColumnName("Fecha")
+                .HasColumnType("datetime");
 
                 entity.Property(e => e.Image)
+                    .HasColumnName("Imagen")
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
@@ -75,7 +101,17 @@ namespace SocialMedia.Infrastructure.Data
             {
                 entity.HasKey(e => e.UserId);
 
+                entity.Property(e => e.UserId)
+                    .HasColumnName("IdUsuario");
+
+                entity.Property(e => e.Names)
+                  .HasColumnName("Nombres")
+                  .IsRequired()
+                  .HasMaxLength(50)
+                  .IsUnicode(false);
+
                 entity.Property(e => e.LastNames)
+                    .HasColumnName("Apellidos")
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -85,19 +121,22 @@ namespace SocialMedia.Infrastructure.Data
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.Property(e => e.DateBird).HasColumnType("date");
+                entity.Property(e => e.DateBird)
+                .HasColumnName("FechaNacimiento")
+                .HasColumnType("date");
 
-                entity.Property(e => e.Names)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+
 
                 entity.Property(e => e.Telephone)
+                .HasColumnName("Telefono")
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.Property(e => e.IsActive)
+                .HasColumnName("Activo");
             });
 
-            
+
         }
 
 
