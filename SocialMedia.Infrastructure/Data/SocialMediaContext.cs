@@ -67,6 +67,7 @@ namespace SocialMedia.Infrastructure.Data
 
             modelBuilder.Entity<Post>(entity =>
             {
+                entity.ToTable("Publicacion");
                 entity.HasKey(e => e.PostId);
 
                 entity.Property(e => e.PostId)
@@ -99,6 +100,8 @@ namespace SocialMedia.Infrastructure.Data
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.ToTable("Usuario");
+
                 entity.HasKey(e => e.UserId);
 
                 entity.Property(e => e.UserId)
