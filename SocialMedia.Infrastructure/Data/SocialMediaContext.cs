@@ -121,11 +121,9 @@ namespace SocialMedia.Infrastructure.Data
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.Property(e => e.DateBird)
+                entity.Property(e => e.DateOfBirth)
                 .HasColumnName("FechaNacimiento")
                 .HasColumnType("date");
-
-
 
                 entity.Property(e => e.Telephone)
                 .HasColumnName("Telefono")
