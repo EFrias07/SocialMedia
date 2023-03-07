@@ -25,9 +25,7 @@ namespace SocialMedia.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
-
             modelBuilder.ApplyConfiguration(new PostConfiguration());
-
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
         }
