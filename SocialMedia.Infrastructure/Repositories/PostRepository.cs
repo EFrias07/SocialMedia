@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SocialMedia.Infrastructure.Repositories
 {
-    public class PostRepository: IPostRepository
+    public class PostRepository : IPostRepository
     {
         private readonly SocialMediaContext _context;
 
@@ -27,9 +27,17 @@ namespace SocialMedia.Infrastructure.Repositories
 
         public async Task<Post> GetPostById(int postId)
         {
-            var post = await _context.Posts.FirstOrDefaultAsync(x=>x.PostId == postId);
+            var post = await _context.Posts.FirstOrDefaultAsync(x => x.PostId == postId);
             return post;
         }
+
+        public async Task InsertPost(Post post)
+        {
+            _context.Posts.Add(post);
+            await _context.SaveChangesAsync();
+        }
+
+
 
 
     }
