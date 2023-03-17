@@ -5,13 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DTOs\**" />
-    <EmbeddedResource Remove="DTOs\**" />
-    <None Remove="DTOs\**" />
+    <Compile Remove="DTO\**" />
+    <EmbeddedResource Remove="DTO\**" />
+    <None Remove="DTO\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\" />
     <Folder Include="Enumerations\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>

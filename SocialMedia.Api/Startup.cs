@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,7 +30,13 @@ namespace SocialMedia.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddAutoMapper();
+
+            //Esta linea dice que cuando se presente un error de referencia circular simplemente lo ignore y muestre la entidad con el nodo siguiente vacio
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
 
             services.AddDbContext<SocialMediaContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("SocialMedia")));
