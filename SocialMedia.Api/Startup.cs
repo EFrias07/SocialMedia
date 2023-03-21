@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SocialMedia.Api.Middleware;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Infrastructure.Data;
 using SocialMedia.Infrastructure.Repositories;
@@ -30,13 +31,20 @@ namespace SocialMedia.Api
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            });
+            })
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.SuppressModelStateInvalidFilter = true;
+                });
+
+
 
             services.AddDbContext<SocialMediaContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("SocialMedia")));
 
             //Dependencias
-            services.AddTransient<IPostRepository,PostRepository>();
+            services.AddTransient<IPostRepository, PostRepository>();
+            services.AddTransient<GlobalExceptionHandlerMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +60,8 @@ namespace SocialMedia.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

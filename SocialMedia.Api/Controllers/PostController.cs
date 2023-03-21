@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SocialMedia.Core.AppExceptions;
 using SocialMedia.Core.DTOs;
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 using SocialMedia.Infrastructure.Repositories;
+using SocialMedia.Infrastructure.Validations.PostValidation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +20,7 @@ namespace SocialMedia.Api.Controllers
         /*Crear mi api*/
         private readonly IPostRepository _postRepository;
         private readonly IMapper _mapper;
-        public PostController(IPostRepository postRepository,IMapper mapper)
+        public PostController(IPostRepository postRepository, IMapper mapper)
         {
             _postRepository = postRepository;
             _mapper = mapper;
@@ -29,7 +32,7 @@ namespace SocialMedia.Api.Controllers
             var post = await _postRepository.GetPosts();
             //Convertir una ENtidad a una EntidadDto
             var postsDto = _mapper.Map<IEnumerable<PostDto>>(post);
-           
+
             return Ok(postsDto);
         }
 
@@ -61,6 +64,23 @@ namespace SocialMedia.Api.Controllers
             //    Image = postDto.Image,
             //    UserId = postDto.UserId,
             //};
+
+            var validator = new PostValidation();
+            var validationResult = validator.Validate(postDto);
+
+            if (!validationResult.IsValid)
+            {
+                throw new AppException(
+                    "Ha ocurrido un error",
+                    validationResult.Errors.Select(validation => new ErrorMessage
+                        {
+                            Message = validation.ErrorMessage,
+                            Code = validation.ErrorCode
+                        }
+                    )
+                );
+
+            }
 
             await _postRepository.InsertPost(post);
             return Ok(post);
