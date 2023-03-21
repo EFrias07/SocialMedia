@@ -38,6 +38,11 @@ namespace SocialMedia.Infrastructure.Repositories
         }
 
 
+        public bool UpdatePost(Post post)
+        {
+            var 
+        }
+
 
 
     }
